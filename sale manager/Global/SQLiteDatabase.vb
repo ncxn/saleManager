@@ -5,38 +5,8 @@ Imports System.Data.SQLite
 Imports System.Windows.Forms
 Class SQLiteDatabase
 
-    Private dbConnection As String
+    Dim dbConnection As String = "Data Source=dbs\db.db3;Version=3;"
 
-    ''' <summary>
-    '''     Default Constructor for SQLiteDatabase Class.
-    ''' </summary>
-    Public Sub New()
-        MyBase.New
-        Me.dbConnection = "Data Source=./dbs/db.db3"
-    End Sub
-
-    ''' <summary>
-    '''     Single Param Constructor for specifying the DB file.
-    ''' </summary>
-    ''' <param name="inputFile">The File containing the DB</param>
-    Public Sub New(ByVal inputFile As String)
-        MyBase.New
-        Me.dbConnection = String.Format("Data Source={0}", inputFile)
-    End Sub
-
-    ''' <summary>
-    '''     Single Param Constructor for specifying advanced connection options.
-    ''' </summary>
-    ''' <param name="connectionOpts">A dictionary containing all desired options and their values</param>
-    Public Sub New(ByVal connectionOpts As Dictionary(Of String, String))
-        MyBase.New
-        Dim str As String = ""
-        For Each row As KeyValuePair(Of String, String) In connectionOpts
-            str = (str + String.Format("{0}={1}; ", row.Key, row.Value))
-        Next
-        str = str.Trim.Substring(0, (str.Length - 1))
-        Me.dbConnection = str
-    End Sub
 
     ''' <summary>
     '''     Allows the programmer to run a query against the Database.
@@ -46,7 +16,7 @@ Class SQLiteDatabase
     Public Function GetDataTable(ByVal sql As String) As DataTable
         Dim dt As DataTable = New DataTable
         Try
-            Dim cnn As SQLiteConnection = New SQLiteConnection(Me.dbConnection)
+            Dim cnn As SQLiteConnection = New SQLiteConnection(dbConnection)
             cnn.Open()
             Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn) With {
                 .CommandText = sql
@@ -56,7 +26,7 @@ Class SQLiteDatabase
             reader.Close()
             cnn.Close()
         Catch e As Exception
-            Throw New Exception(e.Message)
+            MessageBox.Show(e.Message)
         End Try
 
         Return dt
@@ -68,7 +38,7 @@ Class SQLiteDatabase
     ''' <param name="sql">The SQL to be run.</param>
     ''' <returns>An Integer containing the number of rows updated.</returns>
     Public Function ExecuteNonQuery(ByVal sql As String) As Integer
-        Dim cnn As SQLiteConnection = New SQLiteConnection(Me.dbConnection)
+        Dim cnn As SQLiteConnection = New SQLiteConnection(dbConnection)
         cnn.Open()
         Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn) With {
             .CommandText = sql
@@ -84,7 +54,7 @@ Class SQLiteDatabase
     ''' <param name="sql">The query to run.</param>
     ''' <returns>A string.</returns>
     Public Function ExecuteScalar(ByVal sql As String) As String
-        Dim cnn As SQLiteConnection = New SQLiteConnection(Me.dbConnection)
+        Dim cnn As SQLiteConnection = New SQLiteConnection(dbConnection)
         cnn.Open()
         Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn) With {
             .CommandText = sql

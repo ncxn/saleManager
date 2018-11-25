@@ -12,7 +12,7 @@ Class SQLiteDatabase
     ''' </summary>
     Public Sub New()
         MyBase.New
-        Me.dbConnection = "Data Source=recipes.s3db"
+        Me.dbConnection = "Data Source=./dbs/db.db3"
     End Sub
 
     ''' <summary>
@@ -48,8 +48,9 @@ Class SQLiteDatabase
         Try
             Dim cnn As SQLiteConnection = New SQLiteConnection(Me.dbConnection)
             cnn.Open()
-            Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn)
-            mycommand.CommandText = sql
+            Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn) With {
+                .CommandText = sql
+            }
             Dim reader As SQLiteDataReader = mycommand.ExecuteReader
             dt.Load(reader)
             reader.Close()
@@ -69,8 +70,9 @@ Class SQLiteDatabase
     Public Function ExecuteNonQuery(ByVal sql As String) As Integer
         Dim cnn As SQLiteConnection = New SQLiteConnection(Me.dbConnection)
         cnn.Open()
-        Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn)
-        mycommand.CommandText = sql
+        Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn) With {
+            .CommandText = sql
+        }
         Dim rowsUpdated As Integer = mycommand.ExecuteNonQuery
         cnn.Close()
         Return rowsUpdated
@@ -84,8 +86,9 @@ Class SQLiteDatabase
     Public Function ExecuteScalar(ByVal sql As String) As String
         Dim cnn As SQLiteConnection = New SQLiteConnection(Me.dbConnection)
         cnn.Open()
-        Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn)
-        mycommand.CommandText = sql
+        Dim mycommand As SQLiteCommand = New SQLiteCommand(cnn) With {
+            .CommandText = sql
+        }
         Dim value As Object = mycommand.ExecuteScalar
         cnn.Close()
 

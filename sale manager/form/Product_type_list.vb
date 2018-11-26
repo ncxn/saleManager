@@ -1,6 +1,6 @@
 ﻿Imports BrightIdeasSoftware
 Public Class Product_type_list
-    Private Sub ObjectListView_Product_type_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ObjectListView_Product_type.SelectedIndexChanged
+    Private Sub ObjectListView_Product_type_SelectedIndexChanged(sender As Object, e As EventArgs)
 
     End Sub
 
@@ -10,14 +10,11 @@ Public Class Product_type_list
         Dim strSQL As String
         strSQL = "SELECT * FROM Product_Type"
         tb = db.GetDataTable(strSQL)
-        For Each row As DataRow In tb.Rows
-            Dim NewCol As New OLVColumn
-            Try
-                NewCol.AspectName = row("Product_Type_Decscription").ToString
-                ObjectListView_Product_type.Columns.Add(NewCol)
-            Catch ex As Exception
-                MessageBox.Show(ex.Message)
-            End Try
-        Next
+        DataListView1.DataSource = tb
+
+    End Sub
+
+    Private Sub DataListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DataListView1.SelectedIndexChanged
+
     End Sub
 End Class
